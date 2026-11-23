@@ -1,0 +1,115 @@
+/* ═══════════════════════════════════════════
+   Halloween Theme — CSS Custom Properties
+═══════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Creepster&family=Special+Elite&display=swap');
+
+:root {
+  /* Core palette */
+  --color-bg:         #0a0a0f;
+  --color-bg-card:    #110f1a;
+  --color-bg-hover:   #1a1628;
+  --color-orange:     #ff6a00;
+  --color-orange-dim: #cc5500;
+  --color-purple:     #7b2d8b;
+  --color-purple-lt:  #a855f7;
+  --color-red:        #c0392b;
+  --color-green:      #39ff14;
+  --color-text:       #e8d5b7;
+  --color-text-dim:   #9a8a76;
+  --color-border:     rgba(255, 106, 0, 0.2);
+
+  /* Glow effects */
+  --color-glow:       #ff6a00;
+  --glow-sm:          0 0 6px #ff6a00, 0 0 12px rgba(255, 106, 0, 0.4);
+  --glow-md:          0 0 10px #ff6a00, 0 0 24px rgba(255, 106, 0, 0.5), 0 0 40px rgba(255, 106, 0, 0.2);
+  --glow-lg:          0 0 16px #ff6a00, 0 0 40px rgba(255, 106, 0, 0.6), 0 0 80px rgba(255, 106, 0, 0.3);
+  --glow-purple:      0 0 10px #7b2d8b, 0 0 24px rgba(123, 45, 139, 0.5);
+
+  /* Typography */
+  --font-spooky:      'Creepster', cursive;
+  --font-body:        'Special Elite', 'Georgia', serif;
+
+  /* Transitions */
+  --transition-fast:  150ms ease;
+  --transition-med:   300ms ease;
+
+  /* Layout */
+  --radius-sm:        6px;
+  --radius-md:        12px;
+  --radius-lg:        20px;
+}
+
+/* ═══════════════════════════════════════════
+   Reset & Base
+═══════════════════════════════════════════ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ═══════════════════════════════════════════
+   Scrollbar
+═══════════════════════════════════════════ */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-orange-dim);
+  border-radius: 3px;
+}
+
+/* ═══════════════════════════════════════════
+   Focus ring (accessible, spooky)
+═══════════════════════════════════════════ */
+:focus-visible {
+  outline: 2px solid var(--color-orange);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* ═══════════════════════════════════════════
+   Background bats animation
+═══════════════════════════════════════════ */
+@keyframes bat-fly {
+  0%   { transform: translateX(-120px) translateY(0px) scaleX(1); opacity: 0; }
+  10%  { opacity: 0.6; }
+  45%  { transform: translateX(45vw) translateY(-30px) scaleX(1); }
+  50%  { transform: translateX(50vw) translateY(-30px) scaleX(-1); }
+  90%  { opacity: 0.6; }
+  100% { transform: translateX(calc(100vw + 120px)) translateY(10px) scaleX(-1); opacity: 0; }
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  92%       { opacity: 1; }
+  93%       { opacity: 0.4; }
+  94%       { opacity: 1; }
+  96%       { opacity: 0.6; }
+  97%       { opacity: 1; }
+}

@@ -1,0 +1,224 @@
+/* ═══════════════════════════════════════════════════════════
+   DropZone — Halloween drag-and-drop target + playlist
+═══════════════════════════════════════════════════════════ */
+
+/* ── Keyframes ─────────────────────────────────────────── */
+@keyframes pumpkin-bounce {
+  0%, 100% { transform: scale(1) rotate(-3deg); }
+  50%       { transform: scale(1.18) rotate(3deg); }
+}
+
+@keyframes border-glow-pulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(255, 106, 0, 0.4), inset 0 0 12px rgba(255, 106, 0, 0.05); }
+  50%       { box-shadow: 0 0 24px rgba(255, 106, 0, 0.75), inset 0 0 24px rgba(255, 106, 0, 0.12); }
+}
+
+@keyframes note-dance {
+  0%, 100% { transform: translateY(0) rotate(-8deg); opacity: 1; }
+  50%       { transform: translateY(-5px) rotate(8deg); opacity: 0.7; }
+}
+
+@keyframes skull-wobble {
+  0%, 100% { transform: rotate(0deg); }
+  25%       { transform: rotate(-8deg); }
+  75%       { transform: rotate(8deg); }
+}
+
+/* ── Outer wrapper ──────────────────────────────────────── */
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Drop zone box ──────────────────────────────────────── */
+.dropZone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 28px 20px;
+  border: 2px dashed rgba(255, 106, 0, 0.28);
+  border-radius: var(--radius-md);
+  background: rgba(255, 106, 0, 0.03);
+  color: var(--color-text-dim);
+  cursor: default;
+  user-select: none;
+  transition:
+    border-color 200ms ease,
+    background  200ms ease,
+    box-shadow  200ms ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Compact mode once tracks exist */
+.compact {
+  padding: 14px 20px;
+}
+
+/* Active drag-over state */
+.active {
+  border-style: solid;
+  border-color: var(--color-orange);
+  background: rgba(255, 106, 0, 0.07);
+  animation: border-glow-pulse 1s ease-in-out infinite;
+  color: var(--color-text);
+}
+
+/* ── Cobweb decorations ─────────────────────────────────── */
+.web {
+  font-size: 20px;
+  opacity: 0.55;
+  flex-shrink: 0;
+  transition: opacity 200ms;
+}
+
+.active .web {
+  opacity: 0.9;
+}
+
+/* ── Pumpkin icon ───────────────────────────────────────── */
+.pumpkin {
+  font-size: 28px;
+  flex-shrink: 0;
+  transition: transform 200ms ease, filter 200ms ease;
+  filter: drop-shadow(0 0 4px rgba(255, 106, 0, 0.3));
+}
+
+/* Scale + bounce when drag is active */
+.pumpkinActive {
+  animation: pumpkin-bounce 0.6s ease-in-out infinite;
+  filter: drop-shadow(0 0 12px rgba(255, 106, 0, 0.8));
+}
+
+/* ── Text block ─────────────────────────────────────────── */
+.text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  text-align: center;
+}
+
+.label {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-style: italic;
+  transition: color 200ms;
+}
+
+.hint {
+  font-size: 0.72rem;
+  color: var(--color-text-dim);
+  opacity: 0.7;
+  letter-spacing: 0.3px;
+}
+
+/* ── Playlist ───────────────────────────────────────────── */
+.playlist {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  max-height: 220px;
+  overflow-y: auto;
+  padding: 2px 0;
+
+  /* Custom scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-orange-dim) transparent;
+}
+
+.playlist::-webkit-scrollbar {
+  width: 4px;
+}
+.playlist::-webkit-scrollbar-thumb {
+  background: var(--color-orange-dim);
+  border-radius: 2px;
+}
+
+/* ── Playlist item ──────────────────────────────────────── */
+.item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.87rem;
+  color: var(--color-text-dim);
+  border: 1px solid transparent;
+  transition:
+    background     var(--transition-fast),
+    color          var(--transition-fast),
+    border-color   var(--transition-fast),
+    box-shadow     var(--transition-fast);
+  /* Prevent long names overflowing */
+  min-width: 0;
+}
+
+.item:hover {
+  background: var(--color-bg-hover);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+.item:focus-visible {
+  outline: 2px solid var(--color-orange);
+  outline-offset: 2px;
+}
+
+/* Active / now-playing track */
+.itemActive {
+  color: var(--color-orange);
+  background: rgba(255, 106, 0, 0.09);
+  border-color: rgba(255, 106, 0, 0.32);
+  box-shadow: 0 0 8px rgba(255, 106, 0, 0.12);
+  text-shadow: 0 0 8px rgba(255, 106, 0, 0.5);
+}
+
+/* ── Track icon ─────────────────────────────────────────── */
+.itemIcon {
+  font-size: 13px;
+  min-width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.noteAnim {
+  display: inline-block;
+  animation: note-dance 0.6s ease-in-out infinite;
+  color: var(--color-orange);
+}
+
+.skullIcon {
+  display: inline-block;
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+.item:hover .skullIcon {
+  animation: skull-wobble 0.5s ease-in-out;
+  opacity: 1;
+}
+
+/* ── Track name ─────────────────────────────────────────── */
+.itemName {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Preset badge ───────────────────────────────────────── */
+.presetBadge {
+  font-size: 11px;
+  opacity: 0.5;
+  flex-shrink: 0;
+}
